@@ -78,7 +78,7 @@ export default function Notes() {
 
     return (
         <div className="p-4 flex items-center justify-center flex-col bg-gray-300 min-h-screen w-full">
-            <div className="flex flex-col mt-6 gap-2 text-center">
+            <div className="flex flex-col mt-3 gap-2 text-center">
                 <h1 className="font-bold text-4xl md:text-5xl text-gray-800 drop-shadow-xl">✅Task Manager</h1>
                 <p className="font-bold text-sm md:text-md text-gray-700">Organizează-ți sarcinile eficient!</p>
             </div>
@@ -232,4 +232,5 @@ export default function Notes() {
         </div>
     )
 }
+
 
