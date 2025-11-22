@@ -23,6 +23,11 @@ export default function Notes() {
     const [active, setActive] = useState(0)
     const [finalizate, setFinalizate] = useState(0)
     const [prioritare, setPrioritare] = useState(0)
+    const [filtru,setFiltru] = useState("toate")
+    const [filtrate,setFiltrate] = useState([])
+    const [search,setSearch] = useState("")
+
+
 
     useEffect(() => {
         setTotal(notes.length)
@@ -76,11 +81,33 @@ export default function Notes() {
         setEditId(0)
     }
 
+    useEffect(()=>{
+        if (filtru === "toate")
+            setFiltrate(notes)
+        if (filtru === "active") {
+            setFiltrate(notes.filter(n=>n.done === false))
+        }
+        if (filtru === "done") {
+            setFiltrate(notes.filter(n=>n.done === true))
+        }
+        if (filtru === "scazuta") {
+            setFiltrate(notes.filter(n=>n.priority === "scazuta"))
+        }
+        if (filtru === "medie") {
+            setFiltrate(notes.filter(n=>n.priority === "medie"))
+        }
+        if (filtru === "ridicata") {
+            setFiltrate(notes.filter(n=>n.priority === "ridicata"))
+        }
+        if (search) setFiltrate(notes.filter(n=>n.title.includes(search)))
+        
+    },[filtru , notes ,search])
+
     return (
-        <div className="p-4 flex items-center justify-center flex-col bg-gray-300 min-h-screen w-full">
+        <div className="p-4 flex items-center justify-center flex-col bg-[#020617] min-h-screen w-full">
             <div className="flex flex-col mt-3 gap-2 text-center">
-                <h1 className="font-bold text-4xl md:text-5xl text-gray-800 drop-shadow-xl">✅Task Manager</h1>
-                <p className="font-bold text-sm md:text-md text-gray-700">Organizează-ți sarcinile eficient!</p>
+                <h1 className="font-bold text-4xl md:text-5xl text-gray-100 drop-shadow-xl">✅Task Manager</h1>
+                <p className="font-bold text-sm md:text-md text-gray-400">Organizează-ți sarcinile eficient!</p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 w-full max-w-3xl px-2">
                 <div className="bg-white rounded-lg flex justify-center items-center flex-col p-2 drop-shadow-xl">
@@ -172,7 +199,21 @@ export default function Notes() {
 
                 </div>
             </div>
-            {notes.map(n => (
+
+            <div className="flex flex-col bg-white rounded-xl h-auto w-full max-w-3xl gap-5 p-5 my-5">
+                <input value={search} onChange={(e)=>setSearch(e.target.value)}type="text" className="w-full h-10 p-2 rounded-lg bg-white border border-gray-300 drop-shadow-md text-lg" placeholder="🔎 Caută sarcini..."/>
+                <div className="flex flex-row gap-2 justify-center flex-wrap">
+                    <button onClick={()=>setFiltru("toate")} className={`rounded-lg bg-gray-200 px-5 py-2 font-bold text-gray-900 text-sm cursor-pointer transition duration-200 active:scale-80 ${filtru === "toate" && "bg-gradient-to-r from-blue-500 to-purple-500 text-white"}`}>Toate</button>
+                    <button onClick={()=>setFiltru("active")} className={`rounded-lg bg-gray-200 px-5 py-2 font-bold text-gray-900 text-sm cursor-pointer transition duration-200 active:scale-80 ${filtru === "active" && "bg-gradient-to-r from-blue-500 to-purple-500 text-white"}`}>Active</button>
+                    <button onClick={()=>setFiltru("done")} className={`rounded-lg bg-gray-200 px-5 py-2 font-bold text-gray-900 text-sm cursor-pointer transition duration-200  active:scale-80 ${filtru === "done" && "bg-gradient-to-r from-blue-500 to-purple-500 text-white"}`}>Done</button>
+                    <button onClick={()=>setFiltru("scazuta")} className={`rounded-lg bg-gray-200 px-5 py-2 font-bold text-gray-900 text-sm cursor-pointer transition duration-200 active:scale-80 ${filtru  === "scazuta" && "bg-gradient-to-r from-blue-500 to-purple-500 text-white"}`}>Scazută</button>
+                    <button onClick={()=>setFiltru("medie")} className={`rounded-lg bg-gray-200 px-5 py-2 font-bold text-gray-900 text-sm cursor-pointer transition duration-200 active:scale-80 ${filtru === "medie" && "bg-gradient-to-r from-blue-500 to-purple-500 text-white"}`}>Medie</button>
+                    <button onClick={()=>setFiltru("ridicata")} className={`rounded-lg bg-gray-200 px-5 py-2 font-bold text-gray-900 text-sm cursor-pointer transition duration-200 active:scale-80 ${filtru === "ridicata" && "bg-gradient-to-r from-blue-500 to-purple-500 text-white"}`}>Ridicată</button>
+                </div>
+
+            </div>
+
+            {filtrate.map(n => (
                 <div key={n.id} className={`mb-3 w-full max-w-3xl flex items-center justify-between border border-gray-400 rounded-xl p-4 text-gray-800 font-bold drop-shadow-md ${n.done ? "bg-gray-200 opacity-70" : "bg-white"}`}>
 
                     <div className="flex justify-between w-full flex-col md:flex-row gap-3">
@@ -232,5 +273,3 @@ export default function Notes() {
         </div>
     )
 }
-
-
